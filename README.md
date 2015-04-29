@@ -13,7 +13,7 @@ In addition, monkeyhex implements a `pprint`-like pretty-printing of long lists
 and dictionaries.
 
 Small caveat: Monkeyhex will disable all forms of result-saving in python shells,
-i.e. the `_` variable and IPython's Out dictionary.
+i.e. the `_` variable and IPython's `Out` dictionary.
 
 ```python
 Python 2.7.6 (default, Mar 22 2014, 22:59:56) 
