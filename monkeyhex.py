@@ -30,7 +30,19 @@ def joindict(dct, list_depth):
     )
 
 def hex_print(item):
-    print maybe_hex(item)
+    representation = maybe_hex(item)
+    class hexprinted(type(item)):
+        def __init__(self, qqq):
+            self.__qqq = qqq
+            super(hexprinted, self).__init__(qqq)
+
+        def __repr__(self):
+            return maybe_hex(item)
+    try:
+        old_display_hook(hexprinted(item))
+    except:
+        old_display_hook(item)
 
 import sys
+old_display_hook = sys.displayhook
 sys.displayhook = hex_print

@@ -12,8 +12,10 @@ statement.
 In addition, Monkeyhex implements a `pprint`-like pretty-printing of long lists
 and dictionaries.
 
-Small caveat: Monkeyhex will disable all forms of result-saving in python shells,
-i.e. the `_` variable and IPython's `Out` dictionary.
+Small caveat: Monkeyhex makes it a little bit tricky to work with result-saving,
+i.e. the `_` variable and IPython's `Out` dictionary. There's some very strange
+stuff going on and I'm not sure how to describe its effects other than "please
+don't use saved results for anything other than basic calculation."
 
 ```python
 Python 2.7.6 (default, Mar 22 2014, 22:59:56) 
