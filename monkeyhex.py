@@ -30,6 +30,13 @@ def joindict(dct, list_depth):
     )
 
 def hex_print(item):
+    if type(item) is bool:
+        old_display_hook(item)
+        return
+    elif item is None:
+        old_display_hook(item)
+        return
+
     representation = maybe_hex(item)
     class hexprinted(type(item)):
         def __init__(self, qqq):
