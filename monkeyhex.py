@@ -38,14 +38,14 @@ def hex_print(item):
         return
 
     representation = maybe_hex(item)
-    class hexprinted(type(item)):
-        def __init__(self, qqq):
-            self.__qqq = qqq
-            super(hexprinted, self).__init__(qqq)
-
-        def __repr__(self):
-            return maybe_hex(item)
     try:
+        class hexprinted(type(item)):
+            def __init__(self, qqq):
+                self.__qqq = qqq
+                super(hexprinted, self).__init__(qqq)
+
+            def __repr__(self):
+                return maybe_hex(item)
         old_display_hook(hexprinted(item))
     except:
         old_display_hook(item)
