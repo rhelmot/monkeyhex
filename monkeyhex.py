@@ -50,6 +50,17 @@ def hex_print(item):
     except:
         old_display_hook(item)
 
-import sys
-old_display_hook = sys.displayhook
-sys.displayhook = hex_print
+ipython = False
+import inspect
+for frame in inspect.stack():
+    if 'IPython' in frame[1]:
+        ipython = True
+
+if ipython:
+    import IPython
+    formatter = IPython.get_ipython().display_formatter.formatters['text/plain']
+    formatter.for_type(int, lambda n, p, cycle: p.text(hex(n)))
+else:
+    import sys
+    old_display_hook = sys.displayhook
+    sys.displayhook = hex_print
