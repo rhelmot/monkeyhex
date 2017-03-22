@@ -5,7 +5,7 @@ In addition, Monkeyhex implements a pprint-like pretty-printing of long lists an
 
 from distutils.core import setup
 setup(name='monkeyhex',
-      version='1.1',
+      version='1.2',
       py_modules=['monkeyhex'],
       description='Monkeypatch the python interpreter to print integer results in hex',
       long_description=long_description,
