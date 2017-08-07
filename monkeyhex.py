@@ -37,7 +37,6 @@ def hex_print(item):
         old_display_hook(item)
         return
 
-    representation = maybe_hex(item)
     try:
         class hexprinted(type(item)):
             def __init__(self, qqq):
@@ -50,17 +49,45 @@ def hex_print(item):
     except:
         old_display_hook(item)
 
+# detect ipython
 ipython = False
 import inspect
 for frame in inspect.stack():
     if 'IPython' in frame[1]:
         ipython = True
 
+# monkeypatch the interpreter
 if ipython:
     import IPython
     formatter = IPython.get_ipython().display_formatter.formatters['text/plain']
     formatter.for_type(int, lambda n, p, cycle: p.text(hex(n)))
+    formatter.for_type(long, lambda n, p, cycle: p.text(hex(n)))
 else:
     import sys
     old_display_hook = sys.displayhook
     sys.displayhook = hex_print
+
+# monkeypatch pprint
+import pprint
+old_safe_repr = pprint._safe_repr
+def safe_hex_repr(obj, context, maxlevels, level):
+    if type(obj) in (int, long):
+        return hex(obj), False, False
+    else:
+        return old_safe_repr(obj, context, maxlevels, level)
+pprint._safe_repr = safe_hex_repr
+
+# monkeypatch pdb/ipdb "p" command
+import pdb
+def hex_p(self, arg):
+    try:
+        print >>self.stdout, maybe_hex(self._getval(arg))
+    except: # pylint: disable=bare-except
+        pass
+pdb.Pdb.do_p = hex_p
+
+# monkeypatch ipdb/ipdb bang-escape
+def simple_displayhook(self, obj): # pylint: disable=unused-argument
+    if obj is not None:
+        print maybe_hex(obj)
+pdb.Pdb.displayhook = simple_displayhook
