@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 def maybe_hex(item, list_depth=0):
     if isinstance(item, bool):
         return repr(item)
@@ -81,7 +83,7 @@ pprint._safe_repr = safe_hex_repr
 import pdb
 def hex_p(self, arg):
     try:
-        print >>self.stdout, maybe_hex(self._getval(arg))
+        print(maybe_hex(self._getval(arg)), file=self.stdout)
     except: # pylint: disable=bare-except
         pass
 pdb.Pdb.do_p = hex_p
@@ -89,5 +91,5 @@ pdb.Pdb.do_p = hex_p
 # monkeypatch ipdb/ipdb bang-escape
 def simple_displayhook(self, obj): # pylint: disable=unused-argument
     if obj is not None:
-        print maybe_hex(obj)
+        print(maybe_hex(obj))
 pdb.Pdb.displayhook = simple_displayhook
