@@ -1,5 +1,8 @@
 from __future__ import print_function
 
+if bytes is not str: # py3
+    long = int
+
 def maybe_hex(item, list_depth=0):
     if isinstance(item, bool):
         return repr(item)
@@ -41,10 +44,6 @@ def hex_print(item):
 
     try:
         class hexprinted(type(item)):
-            def __init__(self, qqq):
-                self.__qqq = qqq
-                super(hexprinted, self).__init__(qqq)
-
             def __repr__(self):
                 return maybe_hex(item)
         old_display_hook(hexprinted(item))
@@ -63,7 +62,8 @@ if ipython:
     import IPython
     formatter = IPython.get_ipython().display_formatter.formatters['text/plain']
     formatter.for_type(int, lambda n, p, cycle: p.text(hex(n)))
-    formatter.for_type(long, lambda n, p, cycle: p.text(hex(n)))
+    if long is not int:
+        formatter.for_type(long, lambda n, p, cycle: p.text(hex(n)))
 else:
     import sys
     old_display_hook = sys.displayhook
