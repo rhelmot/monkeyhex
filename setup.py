@@ -6,13 +6,13 @@ Monkeyhex, as the name suggests, monkeypatches the system displayhook as well as
 
 from distutils.core import setup
 setup(name='monkeyhex',
-      version='1.4',
+      version='1.5',
       py_modules=['monkeyhex'],
       description='Monkeypatch the python interpreter and debugger to print integer results in hex',
       long_description=long_description,
       url='https://github.com/rhelmot/monkeyhex',
       author='rhelmot',
-      author_email='andrewrdutcher@gmail.com',
+      author_email='audrey@rhelmot.io',
       license='MIT',
       keywords='hex hexadecimal monkeypatch integer number interpreter result debug debugger'
       )
