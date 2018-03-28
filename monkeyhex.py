@@ -1,7 +1,6 @@
 from __future__ import print_function
-
-if bytes is not str: # py3
-    long = int
+from future.utils import iteritems
+from past.builtins import long
 
 def maybe_hex(item, list_depth=0):
     if isinstance(item, bool):
@@ -31,7 +30,7 @@ def joinlist(lst, list_depth):
 def joindict(dct, list_depth):
     return get_joiner(dct, list_depth).join(
         '%s: %s' % (maybe_hex(key, list_depth), maybe_hex(val, list_depth))
-                for key, val in dct.iteritems()
+                for key, val in iteritems(dct)
     )
 
 def hex_print(item):
