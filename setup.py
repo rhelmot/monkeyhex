@@ -6,7 +6,7 @@ Monkeyhex, as the name suggests, monkeypatches the system displayhook as well as
 
 from distutils.core import setup
 setup(name='monkeyhex',
-      version='1.5',
+      version='1.6',
       py_modules=['monkeyhex'],
       description='Monkeypatch the python interpreter and debugger to print integer results in hex',
       long_description=long_description,
