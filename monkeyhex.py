@@ -6,7 +6,10 @@ def maybe_hex(item, list_depth=0):
     if isinstance(item, bool):
         return repr(item)
     if isinstance(item, (int, long)):
-        return hex(item)
+        if _monkeyhex_idapy:
+            return '%X' % item
+        else:
+            return hex(item)
     elif isinstance(item, (list,)):
         return '[%s]' % joinlist(item, list_depth + 1)
     elif isinstance(item, (set,)):
@@ -55,6 +58,14 @@ import inspect
 for frame in inspect.stack():
     if 'IPython' in frame[1]:
         ipython = True
+
+_monkeyhex_idapy = False
+# detect idapy - note: requires ida 7.3+
+try:
+    import idaapi
+    _monkeyhex_idapy = True
+except:
+    pass
 
 # monkeypatch the interpreter
 if ipython:
