@@ -2,6 +2,14 @@ from __future__ import print_function
 from future.utils import iteritems
 from past.builtins import long
 
+DEFAULT_HEX_THRESHOLD = 10**17 # since that hex is more succinct ...
+HEX_THRESHOLD = None
+
+def conditional_hex(x):
+    if HEX_THRESHOLD is None or abs(x) >= HEX_THRESHOLD:
+        return hex(x)
+    return repr(x)
+
 def maybe_hex(item, list_depth=0):
     if isinstance(item, bool):
         return repr(item)
@@ -9,7 +17,7 @@ def maybe_hex(item, list_depth=0):
         if _monkeyhex_idapy:
             return '%X' % item
         else:
-            return hex(item)
+            return conditional_hex(item)
     elif isinstance(item, (list,)):
         return '[%s]' % joinlist(item, list_depth + 1)
     elif isinstance(item, (set,)):
@@ -71,9 +79,9 @@ except:
 if ipython:
     import IPython
     formatter = IPython.get_ipython().display_formatter.formatters['text/plain']
-    formatter.for_type(int, lambda n, p, cycle: p.text(hex(n)))
+    formatter.for_type(int, lambda n, p, cycle: p.text(conditional_hex(n)))
     if long is not int:
-        formatter.for_type(long, lambda n, p, cycle: p.text(hex(n)))
+        formatter.for_type(long, lambda n, p, cycle: p.text(conditional_hex(n)))
 else:
     import sys
     old_display_hook = sys.displayhook
@@ -84,7 +92,7 @@ import pprint
 old_safe_repr = pprint._safe_repr
 def safe_hex_repr(obj, context, maxlevels, level):
     if type(obj) in (int, long):
-        return hex(obj), False, False
+        return conditional_hex(obj), False, False
     else:
         return old_safe_repr(obj, context, maxlevels, level)
 pprint._safe_repr = safe_hex_repr
