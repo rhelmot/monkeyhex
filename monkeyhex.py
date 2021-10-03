@@ -4,9 +4,10 @@ from past.builtins import long
 
 DEFAULT_HEX_THRESHOLD = 10**17 # since that hex is more succinct ...
 HEX_THRESHOLD = None
+ENABLED = True
 
 def conditional_hex(x):
-    if HEX_THRESHOLD is None or abs(x) >= HEX_THRESHOLD:
+    if ENABLED and (HEX_THRESHOLD is None or abs(x) >= HEX_THRESHOLD):
         return hex(x)
     return repr(x)
 
@@ -78,10 +79,27 @@ except:
 # monkeypatch the interpreter
 if ipython:
     import IPython
+    from IPython.core.magic import register_line_magic
+
     formatter = IPython.get_ipython().display_formatter.formatters['text/plain']
     formatter.for_type(int, lambda n, p, cycle: p.text(conditional_hex(n)))
     if long is not int:
         formatter.for_type(long, lambda n, p, cycle: p.text(conditional_hex(n)))
+    
+    @register_line_magic
+    def hexoff(line):
+        """Turn off MonkeyHex"""
+        global ENABLED
+
+        ENABLED = False
+
+    @register_line_magic
+    def hexon(line):
+        """Turn on MonkeyHex"""
+        global ENABLED
+        
+        ENABLED = True
+
 else:
     import sys
     old_display_hook = sys.displayhook
