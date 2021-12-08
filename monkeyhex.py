@@ -108,11 +108,11 @@ else:
 # monkeypatch pprint
 import pprint
 old_safe_repr = pprint._safe_repr
-def safe_hex_repr(obj, context, maxlevels, level):
+def safe_hex_repr(obj, *args, **kwargs):
     if type(obj) in (int, long):
         return conditional_hex(obj), False, False
     else:
-        return old_safe_repr(obj, context, maxlevels, level)
+        return old_safe_repr(obj, *args, **kwargs)
 pprint._safe_repr = safe_hex_repr
 
 # monkeypatch pdb/ipdb "p" command
