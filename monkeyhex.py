@@ -107,13 +107,23 @@ else:
 
 # monkeypatch pprint
 import pprint
-old_safe_repr = pprint._safe_repr
-def safe_hex_repr(obj, *args, **kwargs):
-    if type(obj) in (int, long):
-        return conditional_hex(obj), False, False
-    else:
-        return old_safe_repr(obj, *args, **kwargs)
-pprint._safe_repr = safe_hex_repr
+try:
+    old_safe_repr = pprint._safe_repr
+    def safe_hex_repr(obj, *args, **kwargs):
+        if type(obj) in (int, long):
+            return conditional_hex(obj), False, False
+        else:
+            return old_safe_repr(obj, *args, **kwargs)
+    pprint._safe_repr = safe_hex_repr
+except AttributeError:
+    old_safe_repr = pprint.PrettyPrinter._safe_repr
+    def safe_hex_repr(self, obj, *args, **kwargs):
+        if type(obj) in (int, long):
+            return conditional_hex(obj), False, False
+        else:
+            return old_safe_repr(self, obj, *args, **kwargs)
+    pprint.PrettyPrinter._safe_repr = safe_hex_repr
+
 
 # monkeypatch pdb/ipdb "p" command
 import pdb
