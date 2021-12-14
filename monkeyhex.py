@@ -86,19 +86,22 @@ if ipython:
     if long is not int:
         formatter.for_type(long, lambda n, p, cycle: p.text(conditional_hex(n)))
     
-    @register_line_magic
-    def hexoff(line):
-        """Turn off MonkeyHex"""
-        global ENABLED
+    try:
+        @register_line_magic
+        def hexoff(line):
+            """Turn off MonkeyHex"""
+            global ENABLED
 
-        ENABLED = False
+            ENABLED = False
 
-    @register_line_magic
-    def hexon(line):
-        """Turn on MonkeyHex"""
-        global ENABLED
-        
-        ENABLED = True
+        @register_line_magic
+        def hexon(line):
+            """Turn on MonkeyHex"""
+            global ENABLED
+            
+            ENABLED = True
+    except NameError:
+        pass
 
 else:
     import sys
